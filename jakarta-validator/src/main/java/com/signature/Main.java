@@ -1,16 +1,15 @@
 package com.signature;
 
 
+import jakarta.ejb.Stateless;
+import org.apache.tomee.embedded.Configuration;
 import org.apache.tomee.embedded.Container;
 
+@Stateless
 public class Main {
     public static void main(String[] args) throws Exception {
-        try (Container container = new Container()) {
-            container.start();
-            container.deployClasspathAsWebApp("/", null);
-            System.out.println("TomEE Embedded Server started at http://localhost:23880");
-
-            // Keep the server running
+        try (final Container container = new Container(new Configuration()).deployClasspathAsWebApp()) {
+            System.out.println("Started on http://localhost:" + container.getConfiguration().getHttpPort());
             Thread.currentThread().join();
         }
     }
